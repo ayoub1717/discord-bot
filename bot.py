@@ -1,5 +1,7 @@
+import os
 import discord
 from discord.ext import commands
+from dotenv import load_dotenv
 
 intents = discord.Intents.default()
 intents.members = True
@@ -83,7 +85,7 @@ async def on_ready():
     )
 
     embed.set_image(url="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZTl0dDB2ZjB6cWRoeTVqeWY5cHZvd2oyZzJ0ejR2M2FscHpqc3c1OCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/p9WGfmQMEENR9zRmCO/giphy.gif")
-    embed.set_footer(text=" <:53867waringsquare:1448419679680069813> مخالفة القوانين = Ban | Breaking the rules = Ban <:53867waringsquare:1448419679680069813>")
+    embed.set_footer(text= "<:53867waringsquare:1448419679680069813>مخالفة القوانين = Ban | Breaking the rules = Ban <:53867waringsquare:1448419679680069813>")
     await channel.send(embed=embed)
 
 
@@ -103,6 +105,11 @@ async def on_member_join(member):
     embed.set_footer(text="مرحبا")
 
     await channel.send(embed=embed)
+load_dotenv()
 
+token = os.getenv("DISCORD_TOKEN")
+if not token:
+    print("❌ ERROR: DISCORD_TOKEN not found in environment variables")
+    exit(1)
 
-bot.run("MTQ0MTkyMDcyMjMzNDM4ODI0Ng.G5LT5X.4w04758w3KSQ8YDfDxrwtwwVplKH9ivQSOmcLE")
+bot.run(token)
