@@ -54,7 +54,7 @@ async def update_server_info():
         embed.set_thumbnail(url=guild.icon.url)
 
     embed.set_footer(text="Auto Updating Panel 🔄")
-    embed.set_image(url="https://www.dropbox.com/scl/fi/rzaag0vjxc5bcbcyveg7p/Design-sans-titre-3.png?rlkey=2mtrxe2yuysigg2zgwtv5dkip&st=u9sd1js8&dl=0")
+    embed.set_image(url="https://dl.dropboxusercontent.com/scl/fi/rzaag0vjxc5bcbcyveg7p/Design-sans-titre-3.png?rlkey=2mtrxe2yuysigg2zgwtv5dkip&e=1&st=u9sd1js8&dl=0")
 
 
     if server_info_message:
@@ -72,7 +72,7 @@ async def update_server_info():
 # =========================
 async def update_admins_panel():
     global admin_info_message
-    channel = bot.get_channel(TEAM_CHANNEL_ID)
+    channel = bot.get_channel(TEAM_CHANEL_ID)
     if channel is None:
         print("❌ SERVER INFO CHANNEL NOT FOUND")
         return
@@ -86,13 +86,17 @@ async def update_admins_panel():
 
     owners_role = guild.get_role(OWNER_ROLE_ID)
     if owners_role:
-        embed.add_field(name="<:43165owner:1449092429964902430> Owner", value=owners_role.mention, inline=False)
+        owners_list = [member.mention for member in owners_role.members]
+        owners_text = ", ".join(owners_list) if owners_list else "لا يوجد Owners"
+        embed.add_field(name="<:43165owner:1449092429964902430> Owners", value=owners_text, inline=False)
     else:
-        embed.add_field(name="<:43165owner:1449092429964902430> Owner", value="لا يوجد", inline=False)
+        embed.add_field(name="<:43165owner:1449092429964902430> Owners", value="لا يوجد", inline=False)
 
     admins_role = guild.get_role(ADMIN_ROLE_ID)
     if admins_role:
-        embed.add_field(name="<:88726admin:1449092447996219599> Admins", value=admins_role.mention, inline=False)
+        admins_list = [member.mention for member in admins_role.members]
+        admins_text = ", ".join(admins_list) if admins_list else "لا يوجد Admins"
+        embed.add_field(name="<:88726admin:1449092447996219599> Admins", value=admins_text, inline=False)
     else:
         embed.add_field(name="<:88726admin:1449092447996219599> Admins", value="لا يوجد", inline=False)
 
@@ -167,4 +171,5 @@ if not token:
     exit(1)
 
 bot.run(token)
+
 
