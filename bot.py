@@ -166,7 +166,6 @@ async def update_admin_panel_loop():
                 
 async def on_member_join(member):
     role = member.guild.get_role(WELCOME_ROLE_ID)
-    
     if role:
         try:
             await member.add_roles(role)
@@ -175,12 +174,13 @@ async def on_member_join(member):
             print(f"Cannot add role: {e}")
     else:
         print("Role not found!")
-    # Nickname تلقائي يبدأ بـ 〢T.E.H・
+
+    # تغيير Nickname تلقائي
     try:
         await member.edit(nick=f"〢T.E.H・{member.name}")
     except:
         print(f"Cannot change nickname for {member.name}")
-
+        
     # رسالة ترحيب
     channel = bot.get_channel(WELCOME_CHANNEL_ID)
     if channel is None:
@@ -214,6 +214,7 @@ if not token:
     exit(1)
 
 bot.run(token)
+
 
 
 
