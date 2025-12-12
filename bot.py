@@ -18,8 +18,7 @@ ADMIN_ROLE_ID = 1441912482770845849
 OWNER_ROLE_ID = 1441911447159570552
 DEV_ROLE_ID = 1441913119910793298
 DES_ROLE_ID = 1441913392486158458
-VC_CHANNEL_ID = 1449106229317206076
-WELCOME_ROLE_ID = 1441918805386334401
+
 
 server_info_message = None
 admin_info_message = None
@@ -165,16 +164,6 @@ async def update_admin_panel_loop():
 
                 
 async def on_member_join(member):
-    role = member.guild.get_role(WELCOME_ROLE_ID)
-    if role:
-        try:
-            await member.add_roles(role)
-            print(f"Role {role.name} added to {member.name}")
-        except Exception as e:
-            print(f"Cannot add role: {e}")
-    else:
-        print("Role not found!")
-
     # تغيير Nickname تلقائي
     try:
         await member.edit(nick=f"〢T.E.H・{member.name}")
@@ -214,6 +203,7 @@ if not token:
     exit(1)
 
 bot.run(token)
+
 
 
 
