@@ -9,7 +9,7 @@ intents = discord.Intents.default()
 intents.members = True
 intents.message_content = True
 
-bot = commands.Bot(command_prefix="!", intents=intents)
+bot = commands.Bot(command_prefix="", intents=intents)
 
 WELCOME_CHANNEL_ID = 1441901995794501714
 INFO_CHANNEL_ID = 1441902361416302642
@@ -25,6 +25,7 @@ admin_info_message = None
 # =========================
 # SERVER INFO
 # =========================
+@bot.command(name="p")
 async def profile(ctx, member: discord.Member = None):
     if member is None:
         member = ctx.author
@@ -200,6 +201,7 @@ if not token:
     exit(1)
 
 bot.run(token)
+
 
 
 
