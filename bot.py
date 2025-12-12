@@ -25,6 +25,23 @@ admin_info_message = None
 # =========================
 # SERVER INFO
 # =========================
+async def profile(ctx, member: discord.Member = None):
+    if member is None:
+        member = ctx.author
+
+    embed = discord.Embed(
+        title=f"{member.name}'s Profile",
+        color=0x1E90FF
+    )
+    embed.set_thumbnail(url=member.avatar.url)
+    embed.add_field(name="Username", value=str(member), inline=True)
+    embed.add_field(name="ID", value=member.id, inline=True)
+    embed.add_field(name="Account Created", value=member.created_at.strftime("%d/%m/%Y %H:%M"), inline=False)
+    embed.add_field(name="Joined Server", value=member.joined_at.strftime("%d/%m/%Y %H:%M"), inline=False)
+
+    await ctx.send(embed=embed)
+
+
 async def update_server_info():
     global server_info_message
     channel = bot.get_channel(INFO_CHANNEL_ID)
@@ -183,6 +200,7 @@ if not token:
     exit(1)
 
 bot.run(token)
+
 
 
 
