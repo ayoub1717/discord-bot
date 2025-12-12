@@ -1,56 +1,29 @@
 import os
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
 from dotenv import load_dotenv
-import asyncio
 
-# تحميل متغيرات البيئة
 load_dotenv()
 
-# إعداد intents
 intents = discord.Intents.default()
 intents.members = True
 intents.message_content = True
 
-# إنشاء البوت
 bot = commands.Bot(command_prefix="!", intents=intents)
 
-# معرف القنوات
 WELCOME_CHANNEL_ID = 1441901995794501714
 INFO_CHANNEL_ID = 1441902361416302642
+ADMIN_ROLE_ID = 1441912482770845849
+OWNER_ROLE_ID = 1441911447159570552
 
-# رسالة معلومات السيرفر
 server_info_message = None
+admin_info_message = None
 
-# حدث تشغيل البوت
-@bot.event
-async def on_ready():
-    print(f"Bot logged in as {bot.user}")
-    bot.loop.create_task(server_info_loop())  # بدء تحديث معلومات السيرفر
-
-# تحديث معلومات السيرفر كل دقيقة
-async def server_info_loop():
-    await bot.wait_until_ready()
-    while not bot.is_closed():
-        await update_server_info()
-        await asyncio.sleep(60)  # تحديث كل 60 ثانية
-
-# وظيفة تحديث معلومات السيرفر
-async def rename_all(ctx):
-    for member in ctx.guild.members:
-        if not member.bot:  # éviter les bots
-            try:
-                new_nick = f"si.{member.name}"
-                await member.edit(nick=new_nick)
-                print(f"Nickname de {member.name} changé en {new_nick}")
-            except discord.Forbidden:
-                print(f"Pas de permission pour {member.name}")
-            except discord.HTTPException as e:
-                print(f"Erreur pour {member.name}: {e}")
-    await ctx.send("Tous les nicknames ont été changés !")
+# =========================
+# SERVER INFO
+# =========================
 async def update_server_info():
     global server_info_message
-
     channel = bot.get_channel(INFO_CHANNEL_ID)
     if channel is None:
         print("❌ SERVER INFO CHANNEL NOT FOUND")
@@ -64,7 +37,7 @@ async def update_server_info():
     )
 
     embed.add_field(name="👥 Members | الأعضاء",
-                    value=f"**{guild.member_count}** members", inline=False)
+                    value=f"**{guild.member_count}** عضو", inline=False)
 
     embed.add_field(name="🚀 Boost Level | البوست",
                     value=f"Level **{guild.premium_tier}**", inline=False)
@@ -80,9 +53,8 @@ async def update_server_info():
         embed.set_thumbnail(url=guild.icon.url)
 
     embed.set_footer(text="Auto Updating Panel 🔄")
-    embed.set_image(url="https://dl.dropboxusercontent.com/scl/fi/rzaag0vjxc5bcbcyveg7p/Design-sans-titre-3.png?rlkey=2mtrxe2yuysigg2zgwtv5dkip&e=1&st=u9sd1js8&dl=0")
+    embed.set_image(url="https://dl.dropboxusercontent.com/s/rzaag0vjxc5bcbcyveg7p/Design-sans-titre-3.png")
 
-    # تعديل الرسالة إذا موجودة
     if server_info_message:
         try:
             await server_info_message.edit(embed=embed)
@@ -90,18 +62,77 @@ async def update_server_info():
         except:
             server_info_message = None
 
-    # إنشاء رسالة جديدة إذا لم توجد
     server_info_message = await channel.send(embed=embed)
 
-# حدث دخول عضو جديد
+# =========================
+# ADMINS / OWNERS / BOTS PANEL
+# =========================
+async def update_admins_panel():
+    global admin_info_message
+    channel = bot.get_channel(INFO_CHANNEL_ID)
+    if channel is None:
+        print("❌ SERVER INFO CHANNEL NOT FOUND")
+        return
+
+    guild = channel.guild
+
+    embed = discord.Embed(
+        title="🛡️ Admins, Owners & Bots | الإدارة والبوتات",
+        color=0xFF4500
+    )
+
+    owners_role = guild.get_role(OWNER_ROLE_ID)
+    if owners_role:
+        embed.add_field(name="👑 Owner", value=owners_role.mention, inline=False)
+    else:
+        embed.add_field(name="👑 Owner", value="لا يوجد", inline=False)
+
+    admins_role = guild.get_role(ADMIN_ROLE_ID)
+    if admins_role:
+        embed.add_field(name="🛡️ Admins", value=admins_role.mention, inline=False)
+    else:
+        embed.add_field(name="🛡️ Admins", value="لا يوجد", inline=False)
+
+    bots = [member.mention for member in guild.members if member.bot]
+    if bots:
+        embed.add_field(name="🤖 Bots", value=", ".join(bots), inline=False)
+    else:
+        embed.add_field(name="🤖 Bots", value="لا يوجد", inline=False)
+
+    embed.set_footer(text="Auto Updating Panel 🔄")
+
+    try:
+        if admin_info_message:
+            await admin_info_message.edit(embed=embed)
+        else:
+            admin_info_message = await channel.send(embed=embed)
+    except:
+        admin_info_message = None
+
+# =========================
+# LOOPS
+# =========================
+@tasks.loop(seconds=60)
+async def update_server_info_loop():
+    await update_server_info()
+
+@tasks.loop(seconds=60)
+async def update_admin_panel_loop():
+    await update_admins_panel()
+
+# =========================
+# MEMBER JOIN EVENT
+# =========================
 @bot.event
 async def on_member_join(member):
+    # Nickname تلقائي يبدأ بـ 〢T.E.H・
     try:
         await member.edit(nick=f"〢T.E.H・{member.name}")
     except:
         print(f"Cannot change nickname for {member.name}")
+
+    # رسالة ترحيب
     channel = bot.get_channel(WELCOME_CHANNEL_ID)
-    
     if channel is None:
         return
 
@@ -110,21 +141,26 @@ async def on_member_join(member):
         description=f"مرحبا **{member.mention}** ! نورتنا في السرفر <a:8422lightbluefireflames:1448293696117407824>",
         color=0x4169E1
     )
-
     embed.set_thumbnail(url=member.avatar.url if member.avatar else member.default_avatar.url)
     embed.set_footer(text="مرحبا")
 
     await channel.send(embed=embed)
 
-# تشغيل البوت
+# =========================
+# ON READY
+# =========================
+@bot.event
+async def on_ready():
+    print(f"Bot logged in as {bot.user}")
+    update_server_info_loop.start()
+    update_admin_panel_loop.start()
+
+# =========================
+# RUN BOT
+# =========================
 token = os.getenv("DISCORD_TOKEN")
 if not token:
     print("❌ ERROR: DISCORD_TOKEN not found in environment variables")
     exit(1)
 
 bot.run(token)
-
-
-
-
-
