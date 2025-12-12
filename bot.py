@@ -94,13 +94,13 @@ async def update_admins_panel():
     else:
         embed.add_field(name="<:75071developer:1449092442874839131> Devloppers", value="لا يوجد", inline=False)
     
-    des_role = guild.get_role(DES_ROLE_ID)
-    if des_role:
-        des_role = [member.mention for member in des_role.members]
-        des_role = ", ".join(des_list) if des_list else "لا يوجد Designers"
-        embed.add_field(name="<:86637diamond:1449092446813290759> Designers", value=des_text, inline=False)
+    dev_role_obj = guild.get_role(DEV_ROLE_ID)
+    if dev_role_obj:
+        dev_list = [member.mention for member in dev_role_obj.members]  
+        dev_role = ", ".join(dev_list) if dev_list else "لا يوجد Developers"
+        embed.add_field(name="<:75071developer:1449092442874839131> Developers", value=dev_role, inline=False)
     else:
-        embed.add_field(name="<:86637diamond:1449092446813290759> Designers", value="لا يوجد", inline=False)
+        embed.add_field(name="<:75071developer:1449092442874839131> Developers", value="لا يوجد", inline=False)
 
     
     owners_role = guild.get_role(OWNER_ROLE_ID)
@@ -191,6 +191,7 @@ if not token:
     exit(1)
 
 bot.run(token)
+
 
 
 
