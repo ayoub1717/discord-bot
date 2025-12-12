@@ -162,8 +162,18 @@ async def update_admin_panel_loop():
 # MEMBER JOIN EVENT
 # =========================
 
-                
+@bot.event
 async def on_member_join(member):
+    # إعطاء الرول تلقائي
+    role = member.guild.get_role(WELCOME_ROLE_ID)
+    if role:
+        try:
+            await member.add_roles(role)
+            print(f"Role {role.name} added to {member.name}")
+        except Exception as e:
+            print(f"Cannot add role: {e}")
+    else:
+        print("Role not found!")                
     # تغيير Nickname تلقائي
     try:
         await member.edit(nick=f"〢T.E.H・{member.name}")
@@ -203,6 +213,7 @@ if not token:
     exit(1)
 
 bot.run(token)
+
 
 
 
