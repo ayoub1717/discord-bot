@@ -107,9 +107,12 @@ async def on_member_join(member):
     await channel.send(embed=embed)
 load_dotenv()
 
+print("TOKEN VALUE =", os.getenv("DISCORD_TOKEN"))
+
 token = os.getenv("DISCORD_TOKEN")
 if not token:
     print("❌ ERROR: DISCORD_TOKEN not found in environment variables")
     exit(1)
 
 bot.run(token)
+
