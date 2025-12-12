@@ -13,6 +13,7 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 
 WELCOME_CHANNEL_ID = 1441901995794501714
 INFO_CHANNEL_ID = 1441902361416302642
+TEAM_CHANEL_ID = 1441909604031140053
 ADMIN_ROLE_ID = 1441912482770845849
 OWNER_ROLE_ID = 1441911447159570552
 
@@ -71,7 +72,7 @@ async def update_server_info():
 # =========================
 async def update_admins_panel():
     global admin_info_message
-    channel = bot.get_channel(INFO_CHANNEL_ID)
+    channel = bot.get_channel(TEAM_CHANNEL_ID)
     if channel is None:
         print("❌ SERVER INFO CHANNEL NOT FOUND")
         return
@@ -166,3 +167,4 @@ if not token:
     exit(1)
 
 bot.run(token)
+
