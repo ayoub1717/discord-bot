@@ -53,7 +53,8 @@ async def update_server_info():
         embed.set_thumbnail(url=guild.icon.url)
 
     embed.set_footer(text="Auto Updating Panel 🔄")
-    embed.set_image(url="https://dl.dropboxusercontent.com/s/rzaag0vjxc5bcbcyveg7p/Design-sans-titre-3.png")
+    embed.set_image(url="https://www.dropbox.com/scl/fi/rzaag0vjxc5bcbcyveg7p/Design-sans-titre-3.png?rlkey=2mtrxe2yuysigg2zgwtv5dkip&st=u9sd1js8&dl=0")
+
 
     if server_info_message:
         try:
@@ -62,6 +63,7 @@ async def update_server_info():
         except:
             server_info_message = None
 
+    # إذا مش موجودة → يعمل رسالة جديدة
     server_info_message = await channel.send(embed=embed)
 
 # =========================
@@ -77,27 +79,27 @@ async def update_admins_panel():
     guild = channel.guild
 
     embed = discord.Embed(
-        title="🛡️ Admins, Owners & Bots | الإدارة والبوتات",
-        color=0xFF4500
+        title="<:14551staff:1449092416945520730>Team",
+        color=0x1E90FF
     )
 
     owners_role = guild.get_role(OWNER_ROLE_ID)
     if owners_role:
-        embed.add_field(name="👑 Owner", value=owners_role.mention, inline=False)
+        embed.add_field(name="<:43165owner:1449092429964902430> Owner", value=owners_role.mention, inline=False)
     else:
-        embed.add_field(name="👑 Owner", value="لا يوجد", inline=False)
+        embed.add_field(name="<:43165owner:1449092429964902430> Owner", value="لا يوجد", inline=False)
 
     admins_role = guild.get_role(ADMIN_ROLE_ID)
     if admins_role:
-        embed.add_field(name="🛡️ Admins", value=admins_role.mention, inline=False)
+        embed.add_field(name="<:88726admin:1449092447996219599> Admins", value=admins_role.mention, inline=False)
     else:
-        embed.add_field(name="🛡️ Admins", value="لا يوجد", inline=False)
+        embed.add_field(name="<:88726admin:1449092447996219599> Admins", value="لا يوجد", inline=False)
 
     bots = [member.mention for member in guild.members if member.bot]
     if bots:
-        embed.add_field(name="🤖 Bots", value=", ".join(bots), inline=False)
+        embed.add_field(name="<:68882bot:1449092440664309962> Bots", value=", ".join(bots), inline=False)
     else:
-        embed.add_field(name="🤖 Bots", value="لا يوجد", inline=False)
+        embed.add_field(name="<:68882bot:1449092440664309962> Bots", value="لا يوجد", inline=False)
 
     embed.set_footer(text="Auto Updating Panel 🔄")
 
