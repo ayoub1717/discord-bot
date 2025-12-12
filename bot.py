@@ -68,6 +68,7 @@ async def update_server_info():
         embed.set_thumbnail(url=guild.icon.url)
 
     embed.set_footer(text="Auto Updating Panel 🔄")
+    embed.set_image(url="https://www.dropbox.com/scl/fi/rzaag0vjxc5bcbcyveg7p/Design-sans-titre-3.png?rlkey=2mtrxe2yuysigg2zgwtv5dkip&st=u9sd1js8&dl=0")
 
     # تعديل الرسالة إذا موجودة
     if server_info_message:
@@ -105,4 +106,5 @@ if not token:
     exit(1)
 
 bot.run(token)
+
 
