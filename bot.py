@@ -52,7 +52,7 @@ async def update_server_info():
     )
 
     embed.add_field(name="👥 Members | الأعضاء",
-                    value=f"**{guild.member_count}** عضو", inline=False)
+                    value=f"**{guild.member_count}** members", inline=False)
 
     embed.add_field(name="🚀 Boost Level | البوست",
                     value=f"Level **{guild.premium_tier}**", inline=False)
@@ -105,3 +105,4 @@ if not token:
     exit(1)
 
 bot.run(token)
+
