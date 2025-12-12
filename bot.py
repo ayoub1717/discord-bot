@@ -19,7 +19,8 @@ OWNER_ROLE_ID = 1441911447159570552
 DEV_ROLE_ID = 1441913119910793298
 DES_ROLE_ID = 1441913392486158458
 VC_CHANNEL_ID = 1449106229317206076
-AUDIO_FILE = "https://youtu.be/lAwYodrBr2Q?si=TvwwHWSfRiW3a0NH"  
+AUDIO_FILE = "bob.mp3"
+vc.play(discord.FFmpegPCMAudio(AUDIO_FILE, executable=r"C:\ffmpeg-2025-12-10-git-4f947880bd-essentials_build\bin"))
 
 server_info_message = None
 admin_info_message = None
@@ -216,6 +217,7 @@ if not token:
     exit(1)
 
 bot.run(token)
+
 
 
 
