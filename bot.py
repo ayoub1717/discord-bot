@@ -96,7 +96,12 @@ async def update_server_info():
 # حدث دخول عضو جديد
 @bot.event
 async def on_member_join(member):
+    try:
+        await member.edit(nick=f"〢T.E.H・{member.name}")
+    except:
+        print(f"Cannot change nickname for {member.name}")
     channel = bot.get_channel(WELCOME_CHANNEL_ID)
+    
     if channel is None:
         return
 
@@ -118,6 +123,7 @@ if not token:
     exit(1)
 
 bot.run(token)
+
 
 
 
