@@ -89,7 +89,7 @@ async def update_admins_panel():
     dev_role = guild.get_role(DEV_ROLE_ID)
     if dev_role:
         dev_role = [member.mention for member in dev_role.members]
-        dev_role = ", ".join(dev_list) if dev_list else "لا يوجد devloppers"
+        dev_role = ", ".join(dev_list) if dev_list else "لا يوجد Developers"
         embed.add_field(name="<:75071developer:1449092442874839131> Devloppers", value=dev_text, inline=False)
     else:
         embed.add_field(name="<:75071developer:1449092442874839131> Devloppers", value="لا يوجد", inline=False)
@@ -191,6 +191,7 @@ if not token:
     exit(1)
 
 bot.run(token)
+
 
 
 
