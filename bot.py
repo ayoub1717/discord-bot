@@ -16,6 +16,8 @@ INFO_CHANNEL_ID = 1441902361416302642
 TEAM_CHANEL_ID = 1441909604031140053
 ADMIN_ROLE_ID = 1441912482770845849
 OWNER_ROLE_ID = 1441911447159570552
+DEV_ROLE_ID = 1441913119910793298
+DES_ROLE_ID = 1441913392486158458
 
 server_info_message = None
 admin_info_message = None
@@ -38,7 +40,7 @@ async def update_server_info():
     )
 
     embed.add_field(name="👥 Members | الأعضاء",
-                    value=f"**{guild.member_count}** عضو", inline=False)
+                    value=f"**{guild.member_count}** members", inline=False)
 
     embed.add_field(name="🚀 Boost Level | البوست",
                     value=f"Level **{guild.premium_tier}**", inline=False)
@@ -83,7 +85,24 @@ async def update_admins_panel():
         title="<:14551staff:1449092416945520730>Team",
         color=0x1E90FF
     )
+    
+    dev_role = guild.get_role(DEV_ROLE_ID)
+    if dev_role:
+        dev_role = [member.mention for member in dev_role.members]
+        dev_role = ", ".join(dev_list) if dev_list else "لا يوجد devloppers"
+        embed.add_field(name="<:75071developer:1449092442874839131> Devloppers", value=dev_text, inline=False)
+    else:
+        embed.add_field(name="<:75071developer:1449092442874839131> Devloppers", value="لا يوجد", inline=False)
+    
+    des_role = guild.get_role(DES_ROLE_ID)
+    if des_role:
+        des_role = [member.mention for member in des_role.members]
+        des_role = ", ".join(des_list) if des_list else "لا يوجد Designers"
+        embed.add_field(name="<:86637diamond:1449092446813290759> Designers", value=des_text, inline=False)
+    else:
+        embed.add_field(name="<:86637diamond:1449092446813290759> Designers", value="لا يوجد", inline=False)
 
+    
     owners_role = guild.get_role(OWNER_ROLE_ID)
     if owners_role:
         owners_list = [member.mention for member in owners_role.members]
@@ -107,6 +126,7 @@ async def update_admins_panel():
         embed.add_field(name="<:68882bot:1449092440664309962> Bots", value="لا يوجد", inline=False)
 
     embed.set_footer(text="Auto Updating Panel 🔄")
+    embed.set_image(url="https://dl.dropboxusercontent.com/scl/fi/rzaag0vjxc5bcbcyveg7p/Design-sans-titre-3.png?rlkey=2mtrxe2yuysigg2zgwtv5dkip&e=1&st=u9sd1js8&dl=0")
 
     try:
         if admin_info_message:
@@ -171,5 +191,6 @@ if not token:
     exit(1)
 
 bot.run(token)
+
 
 
