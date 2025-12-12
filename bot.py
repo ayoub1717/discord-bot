@@ -85,16 +85,7 @@ async def update_admins_panel():
         title="<:14551staff:1449092416945520730>Team",
         color=0x1E90FF
     )
-    
-    dev_role = guild.get_role(DEV_ROLE_ID)
-    if dev_role:
-        dev_role_obj = discord.utils.get(guild.roles, name="developer")
-        dev_list = [member.mention for member in guild.members if dev_role_obj in member.roles] if dev_role_obj else []
-        dev_role = ", ".join(dev_list) if dev_list else "لا يوجد Developers"
-        embed.add_field(name="<:75071developer:1449092442874839131> Devloppers", value=dev_text, inline=False)
-    else:
-        embed.add_field(name="<:75071developer:1449092442874839131> Devloppers", value="لا يوجد", inline=False)
-    
+        
     dev_role_obj = guild.get_role(DEV_ROLE_ID)
     if dev_role_obj:
         dev_list = [member.mention for member in dev_role_obj.members]  
