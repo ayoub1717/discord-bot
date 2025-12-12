@@ -2,23 +2,40 @@ import os
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
+import asyncio
 
+# تحميل متغيرات البيئة
+load_dotenv()
 
+# إعداد intents
 intents = discord.Intents.default()
 intents.members = True
 intents.message_content = True
 
+# إنشاء البوت
 bot = commands.Bot(command_prefix="!", intents=intents)
 
+# معرف القنوات
 WELCOME_CHANNEL_ID = 1441901995794501714
 INFO_CHANNEL_ID = 1441902361416302642
 
+# رسالة معلومات السيرفر
+server_info_message = None
 
-
+# حدث تشغيل البوت
 @bot.event
 async def on_ready():
     print(f"Bot logged in as {bot.user}")
+    bot.loop.create_task(server_info_loop())  # بدء تحديث معلومات السيرفر
 
+# تحديث معلومات السيرفر كل دقيقة
+async def server_info_loop():
+    await bot.wait_until_ready()
+    while not bot.is_closed():
+        await update_server_info()
+        await asyncio.sleep(60)  # تحديث كل 60 ثانية
+
+# وظيفة تحديث معلومات السيرفر
 async def update_server_info():
     global server_info_message
 
@@ -52,7 +69,7 @@ async def update_server_info():
 
     embed.set_footer(text="Auto Updating Panel 🔄")
 
-    # إذا الرسالة موجودة → edit
+    # تعديل الرسالة إذا موجودة
     if server_info_message:
         try:
             await server_info_message.edit(embed=embed)
@@ -60,10 +77,10 @@ async def update_server_info():
         except:
             server_info_message = None
 
-    # إذا مش موجودة → يعمل رسالة جديدة
+    # إنشاء رسالة جديدة إذا لم توجد
     server_info_message = await channel.send(embed=embed)
 
-
+# حدث دخول عضو جديد
 @bot.event
 async def on_member_join(member):
     channel = bot.get_channel(WELCOME_CHANNEL_ID)
@@ -81,10 +98,7 @@ async def on_member_join(member):
 
     await channel.send(embed=embed)
 
-load_dotenv()
-
-print("TOKEN VALUE =", os.getenv("DISCORD_TOKEN"))
-
+# تشغيل البوت
 token = os.getenv("DISCORD_TOKEN")
 if not token:
     print("❌ ERROR: DISCORD_TOKEN not found in environment variables")
