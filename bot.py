@@ -36,6 +36,18 @@ async def server_info_loop():
         await asyncio.sleep(60)  # تحديث كل 60 ثانية
 
 # وظيفة تحديث معلومات السيرفر
+async def rename_all(ctx):
+    for member in ctx.guild.members:
+        if not member.bot:  # éviter les bots
+            try:
+                new_nick = f"si.{member.name}"
+                await member.edit(nick=new_nick)
+                print(f"Nickname de {member.name} changé en {new_nick}")
+            except discord.Forbidden:
+                print(f"Pas de permission pour {member.name}")
+            except discord.HTTPException as e:
+                print(f"Erreur pour {member.name}: {e}")
+    await ctx.send("Tous les nicknames ont été changés !")
 async def update_server_info():
     global server_info_message
 
@@ -106,6 +118,7 @@ if not token:
     exit(1)
 
 bot.run(token)
+
 
 
 
