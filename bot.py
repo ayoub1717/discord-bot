@@ -19,8 +19,7 @@ OWNER_ROLE_ID = 1441911447159570552
 DEV_ROLE_ID = 1441913119910793298
 DES_ROLE_ID = 1441913392486158458
 VC_CHANNEL_ID = 1449106229317206076
-AUDIO_FILE = "bob.mp3"
-vc.play(discord.FFmpegPCMAudio(AUDIO_FILE, executable=r"C:\ffmpeg-2025-12-10-git-4f947880bd-essentials_build\bin"))
+WELCOME_ROLE_ID = 1441918805386334401
 
 server_info_message = None
 admin_info_message = None
@@ -163,21 +162,19 @@ async def update_admin_panel_loop():
 # =========================
 # MEMBER JOIN EVENT
 # =========================
-@bot.event
-async def on_voice_state_update(member, before, after):
-    # ki el user yod5ol voice channel mouch bot
-    if after.channel and after.channel.id == VC_CHANNEL_ID and not member.bot:
-        # check if bot already connected
-        bot_member = after.channel.guild.me
-        if not bot_member.voice or bot_member.voice.channel.id != VC_CHANNEL_ID:
-            try:
-                vc = await after.channel.connect()
-                vc.play(discord.FFmpegPCMAudio(AUDIO_FILE), after=lambda e: print("Finished playing"))
-                print(f"Bot joined {after.channel.name} and is playing audio!")
-            except Exception as e:
-                print(f"Failed to join VC: {e}")
+
                 
 async def on_member_join(member):
+    role = member.guild.get_role(WELCOME_ROLE_ID)
+    
+    if role:
+        try:
+            await member.add_roles(role)
+            print(f"Role {role.name} added to {member.name}")
+        except Exception as e:
+            print(f"Cannot add role: {e}")
+    else:
+        print("Role not found!")
     # Nickname تلقائي يبدأ بـ 〢T.E.H・
     try:
         await member.edit(nick=f"〢T.E.H・{member.name}")
@@ -217,6 +214,7 @@ if not token:
     exit(1)
 
 bot.run(token)
+
 
 
 
